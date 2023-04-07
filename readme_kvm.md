@@ -1,1 +1,1 @@
-![structure](./structure.svg)
+![structure](assets/structure.svg)
