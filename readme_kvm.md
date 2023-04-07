@@ -1,6 +1,6 @@
 ```graphviz
 digraph{
-    
+    compound=true
     subgraph cluster_router{
         graph [label="Router", labeljust=l]
         node [shape=record]
@@ -75,8 +75,10 @@ digraph{
         graph [label="Jetson Nano",labeljust=l]
         node [shape=record]
 
-
+    
         J2 [label="{Jetson-Nano-B01-2| {CPU: ARM Cortex-A57 (x4 cores)| RAM: 4 GB | IP: 192.168.0.7|GPU: Maxwell GPU 128-Core}|Disk: 256GB | System: Ubuntu}"]
+
+        J [shape=none,label=""]
 
         J1 [label="{Jetson-Nano-B01-1| {CPU: ARM Cortex-A57 (x4 cores)| RAM: 4 GB | IP: 192.168.0.6|GPU: Maxwell GPU 128-Core}|Disk: 512 GB | System: Ubuntu}"]
 
@@ -103,6 +105,10 @@ digraph{
     SP3 -> J1
     SP1 -> J2
 
-    HP -> k8s []
+    ranksep=1.5
+    HP -> k8s [lhead=cluster_k8s,ltail=cluster_vm]
+    J -> k8s [lhead=cluster_k8s,ltail=cluster_jetson]
+
+
 }
 ```
