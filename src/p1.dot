@@ -1,5 +1,8 @@
 digraph {
     compound = true;
+    labelloc = "t"
+    labeljust=l;
+    label="The Structure of the Cluster"
     subgraph cluster_router {
         graph [label = "Router"; labeljust = l;];
         node [shape = record;];
@@ -80,7 +83,66 @@ digraph {
         graph [label = "k8s cluster"; labeljust = l;];
         node [shape = record;];
         
-        k8s;
+        k8s [label="k8s-cluster"];
+
+        k8s_master [label="{k8s_master_nodes|VM HOST: HP-SERVER}"];
+
+        k8s_master_node1 [label="{k8s_master_node1| {KVM|{vCPU: 2|RAM: 4GB| Network: Direct via eno1|Disk: 50GB|Network:192.168.0.20}}}"];
+        k8s_master_node2 [label="{k8s_master_node2| {KVM|{vCPU: 2|RAM: 4GB| Network: Direct via eno1|Disk: 50GB|Network:192.168.0.21}}}"];
+        k8s_master_node3 [label="{k8s_master_node3| {KVM|{vCPU: 2|RAM: 4GB| Network: Direct via eno1|Disk: 50GB|Network:192.168.0.22}}}"];
+
+
+        HA1 [label="{High_Availability_Server_1|VM HOST: HP-SERVER|{KVM|{vCPU: 2|RAM: 4GB| Network: Direct via eno1|Disk: 50GB|VIP:192.168.0.50}}}"]
+        HA2 [label="{High_Availability_Server_2|VM HOST: STEAM-DECK|{KVM|{vCPU: 2|RAM: 3.5GB| Network: Direct via eno1|Disk: 50GB|VIP:192.168.0.51}}}"]
+
+
+
+
+        k8s -> HA1;
+        k8s -> HA2
+
+        HA1 -> k8s_master;
+        HA2 -> k8s_master;
+        
+        k8s_master -> k8s_master_node1;
+        k8s_master -> k8s_master_node2;
+        k8s_master -> k8s_master_node3;
+
+
+        k8s_work [label="k8s_work_nodes"];
+
+        k8s_master_node1 -> k8s_work;
+        k8s_master_node2 -> k8s_work;
+        k8s_master_node3 -> k8s_work;
+
+        
+        k8s_work_host1 [label="{k8s_work_vm_host_1|VM HOST: STEAM-DECk}"];
+
+        sd_vm1 [label="{k8s_work_node_1|{KVM|{vCPU:2|RAM:3.5 Gb}}}"];
+        sd_vm2 [label="{k8s_work_node_2|{KVM|{vCPU:2|RAM:3.5 Gb}}}"];
+        sd_vm3 [label="{k8s_work_node_3|{KVM|{vCPU:2|RAM:3.5 Gb}}}"];
+     
+
+
+        k8s_work_host1 -> sd_vm1;
+        k8s_work_host1 -> sd_vm2;
+        k8s_work_host1 -> sd_vm3;
+        
+        k8s_work_host2 [label="{k8s_work_nodes_2|{Physical Machine: NUC11-SERVER}}"]
+        
+        k8s_work_host3 [label="{k8s_work_nodes_3|{Physical Machine: Jetson-Nano-1}}"]
+        k8s_work_host4 [label="{k8s_work_nodes_4|{Physical Machine: Jetson-Nano-2}}"]
+
+
+        k8s_work -> k8s_work_host1;
+        k8s_work -> k8s_work_host2;
+        k8s_work -> k8s_work_host3;
+        k8s_work -> k8s_work_host4;
+
+
+
+        
+       
     }
     
     P5 -> HP;
